@@ -12,7 +12,7 @@ const openAPIDocument = {
     version: '1.0.0',
     license: {
       name: 'MIT',
-      url: 'https://github.com/quick-feed/raw/license/MIT.md'
+      url: 'https://github.com/ionware/quick-feed/blob/master/LICENSE.md'
     },
     contact: {
       name: 'Adedeji Stephen',
