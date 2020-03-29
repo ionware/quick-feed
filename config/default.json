@@ -1,0 +1,16 @@
+{
+  "database": {
+    "driver": "mongodb",
+    "host": "127.0.0.1",
+    "port": "27017",
+    "db": "quick_feed"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 5000
+  },
+  "api": {
+    "version": "v1"
+  },
+  "env": "development"
+}

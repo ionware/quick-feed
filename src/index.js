@@ -1,5 +1,7 @@
-function sayName(name) {
-  return 'Hello ' + name;
-}
+const http = require('http');
+const config = require('config');
+const app = require('./server');
 
-sayName('John Doe');
+const server = http.createServer(app);
+
+server.listen(config.server.port);
