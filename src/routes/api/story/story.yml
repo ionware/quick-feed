@@ -1,0 +1,150 @@
+/story:
+  description: >
+    Defines the operations that can be performed on the **/story** endpoint. Note that some 
+    operations requires authentication
+  get:
+    tags:
+      - Story
+    description: >
+      Get the list of stories. By stories, we mean combination of **Feeds** and **Polls**. By default, 
+      a mixture of feeds and polls will be returned, unless altered by the query parameter `type`. Also 
+      by default, **30** stories are returned in a page (*this behavior can be of course changed by query 
+      parameter `limit`), and the `page` query parameter can be use to skip a page and ask for the next.
+      **We recommend thay you do not change this behavior, unless really needed**.
+    parameters:
+      - name: limit
+        in: query
+        required: false
+        description: Number of `stories` to get per request. Default is `30`.
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        required: false
+        description: Specify the skip, the current page to get stories from the paginated result.
+        schema:
+          type: integer
+          format: int32
+      - name: type
+        in: query
+        description: The type of the stories to select. You have two types, `feed` and `poll`.
+        schema:
+          type: string
+          enum:
+            - feed
+            - poll
+    responses:
+      '200':
+        description: >
+          Returns an object that has properties `stories` (an array of stories), `page` (total number of navigate-able pages), `current_page` (the current page ask for) and `total` (the number of story items in `stories` property).
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 30
+                current_page:
+                  type: integer
+                  example: 2
+                page:
+                  type: integer
+                  example: 4
+                  description: Total number of pages, `current_page` cannot exceed the value returned here
+                stories:
+                  type: array
+                  items:
+                    type: object
+                    description: A single story which could be a `feed` or a `poll`.
+                    properties:
+                      _id:
+                        type: string
+                        format: mongooseID
+                        example: '56ddf776ef67876efecb765b'
+                      type:
+                        type: string
+                        enum:
+                          - feed
+                          - poll
+                      excerpt:
+                        type: string
+                        example: Lorem Ipsum dolor
+                      created_at:
+                        type: string
+                        format: datetime
+                        example: 3/30/2020, 12:42:31 AM
+                      updated_at:
+                        type: string
+                        format: datetime
+                        example: 3/30/2020, 12:42:31 AM
+                      feed:
+                        $ref: '#/components/schemas/Feed'
+                      poll:
+                        $ref: '#/components/schemas/Poll'
+
+components:
+  schemas:
+    Feed:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: mongooseID
+          example: '56ddf776ef67876efecb765b'
+        title:
+          type: string
+          example: Why couldn't Tom Riddle killed Harry Potter?
+        description:
+          type: string
+          example: A verbose and descriptive description.
+        likes:
+          type: integer
+          example: 498
+        comments:
+          type: array
+          items:
+            type: object
+          $ref: '#/components/schemas/Comment'
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: mongooseID
+          example: '56ddf776ef67876efecb765b'
+        message:
+          type: string
+          example: It's just a fairy tale. Voldemort was supposed to kill him!
+
+    Poll:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: mongooseID
+          example: '56ddf776ef67876efecb765b'
+        title:
+          type: string
+          example: Who will you nominate as the best writer?
+        options:
+          type: array
+          items:
+            type: string
+          example:
+            - John Maxwell
+            - Stephen Covey
+            - Alen James
+        votes:
+          type: array
+          items:
+            type: integer
+          example:
+            - 34
+            - 28
+            - 19
+        end_at:
+          type: string
+          description: The date time the poll will ends.
+          example: 3/30/2020, 12:42:31 AM

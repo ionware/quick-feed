@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const config = require('config');
+const bodyParser = require('body-parser');
 const routes = require('./routes/index');
 
 const app = express();
@@ -14,6 +15,8 @@ app.use(helmet());
 if (config.env === 'development') {
   app.use(morgan('short'));
 }
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.use(routes);
 

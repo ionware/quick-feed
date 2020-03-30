@@ -29,5 +29,5 @@ const openAPIDocument = {
 
 module.exports = swaggerJSDoc({
   definition: openAPIDocument,
-  apis: ['./routes/**/*.yaml']
+  apis: ['./src/routes/**/*.yml']
 });
