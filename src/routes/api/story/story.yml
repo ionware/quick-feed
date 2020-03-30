@@ -1,15 +1,10 @@
 /story:
-  description: >
-    Defines the operations that can be performed on the **/story** endpoint. Note that some 
-    operations requires authentication
+  description: Defines the operations that can be performed on the **/story** endpoint. Note that some operations requires authentication
   get:
     tags:
       - Story
     description: >
-      Get the list of stories. By stories, we mean combination of **Feeds** and **Polls**. By default, 
-      a mixture of feeds and polls will be returned, unless altered by the query parameter `type`. Also 
-      by default, **30** stories are returned in a page (*this behavior can be of course changed by query 
-      parameter `limit`), and the `page` query parameter can be use to skip a page and ask for the next.
+      Get the list of stories. By stories, we mean combination of **Feeds** and **Polls**. By default, a mixture of feeds and polls will be returned, unless altered by the query parameter `type`. Also by default, **30** stories are returned in a page (*this behavior can be of course changed by query parameter `limit`), and the `page` query parameter can be use to skip a page and ask for the next.
       **We recommend thay you do not change this behavior, unless really needed**.
     parameters:
       - name: limit
@@ -83,6 +78,111 @@
                         $ref: '#/components/schemas/Feed'
                       poll:
                         $ref: '#/components/schemas/Poll'
+
+  post:
+    tags:
+      - Story
+    description: >
+      Create a new feed or poll. Required Authentication.
+    requestBody:
+      description: >
+        The content of the story to create. Always an `object`, and the `type` will determine the structure of the data that will be included
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - feed
+                  - poll
+              excerpt:
+                description: A short headline of the `feed` or `poll`.
+                type: string
+              title:
+                description: The title of the `feed` or `poll`.
+                type: string
+              description:
+                description: A verbose description of the `feed` or `poll`.
+                type: string
+              options:
+                description: The options to vote for in the `poll`. **Does not apply** to `feed`.
+                type: array
+                items:
+                  type: string
+              end:
+                description: The timestamp the `poll` is going to end. **Does not apply** to `feed`.
+                type: string
+                format: datetime
+            required:
+              - type
+              - excerpt
+              - title
+
+    responses:
+      '200':
+        description: >
+          [OK] A typical success response.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  format: mongooseID
+                  example: '56ddf776ef67876efecb765b'
+                type:
+                  type: string
+                  enum:
+                    - feed
+                    - poll
+                excerpt:
+                  type: string
+                poll:
+                  $ref: '#/components/schemas/Poll'
+                feed:
+                  $ref: '#/components/schemas/Feed'
+/story/{storyId}:
+  description: >
+    Delete a story (`feed` or `poll`) of the specified `id`.
+  parameters:
+    - name: storyId
+      in: path
+      required: true
+      description: The `id` of the story to perform operation on.
+      schema:
+        type: string
+  delete:
+    tags:
+      - Story
+    description: >
+      Deletes a single story by its `id`. Requires Authentication.
+    responses:
+      '200':
+        description: Story successfully deleted.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  format: mongooseID
+                  example: '56ddf776ef67876efecb765b'
+                type:
+                  type: string
+                  enum:
+                    - feed
+                    - poll
+                excerpt:
+                  type: string
+                poll:
+                  $ref: '#/components/schemas/Poll'
+                feed:
+                  $ref: '#/components/schemas/Feed'
 
 components:
   schemas:
