@@ -12,7 +12,7 @@ const pollSchema = new mongoose.Schema(
     },
     votes: {
       type: Array,
-      required: true
+      required: false
     },
     end: {
       type: Date
