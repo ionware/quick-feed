@@ -21,4 +21,11 @@ const pollSchema = new mongoose.Schema(
   {timestamps: true}
 );
 
+// eslint-disable-next-line func-names
+pollSchema.pre('save', function (next) {
+  // Create vote counts for poll options.
+  this.votes = this.options.map(() => 0);
+  next();
+});
+
 module.exports = mongoose.model('Poll', pollSchema);

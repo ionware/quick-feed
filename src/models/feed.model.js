@@ -15,7 +15,7 @@ const feedSchema = new mongoose.Schema(
       default: 0
     },
     comments: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: [mongoose.Schema.Types.ObjectId],
       ref: 'Comment'
     }
   },

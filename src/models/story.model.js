@@ -12,13 +12,11 @@ const storySchema = new mongoose.Schema(
     },
     feed: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Feed',
-      default: null
+      ref: 'Feed'
     },
     poll: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Poll',
-      default: null
+      ref: 'Poll'
     }
   },
   {timestamps: true}
