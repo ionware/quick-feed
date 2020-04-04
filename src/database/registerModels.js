@@ -19,12 +19,10 @@ function requireModel(folderPath) {
  *
  * @param {string} folder
  */
-async function registerModelFromPath(folder = 'models') {
+function registerModelFromPath(folder = 'models') {
   const absoluteModelsPath = path.resolve(__dirname, '../', folder);
-  fs.readdir(absoluteModelsPath, (err, files) => {
-    if (err) throw err;
-    files.forEach(requireModel(absoluteModelsPath));
-  });
+  const files = fs.readdirSync(absoluteModelsPath);
+  files.forEach(requireModel(absoluteModelsPath));
 }
 
 module.exports = registerModelFromPath;
