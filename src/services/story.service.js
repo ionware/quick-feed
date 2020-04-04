@@ -23,13 +23,17 @@ class StoryService {
 
     pipeline.push({$skip: limit * page}, {$limit: limit}, {$project: {__v: 0}});
 
-    const response = await model.aggregate(pipeline).exec();
+    const stories = await model.aggregate(pipeline).exec();
+    const populatedStories = await model.populate(stories, [
+      {path: 'poll'},
+      {path: 'feed'}
+    ]);
 
     return {
       total: limit,
       pages: Math.ceil(total / limit),
       current_page: page + 1,
-      stories: response
+      stories: populatedStories
     };
   }
 }
