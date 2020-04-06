@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
 const signupFormValidator = require('../validators/user.validate');
-
-const UserModel = mongoose.model('User');
+const {createUser} = require('../services/user.service');
 
 class UserController {
   static async post(req, res, next) {
@@ -18,7 +16,7 @@ class UserController {
       });
     }
     try {
-      const user = await UserModel.create(value);
+      const user = await createUser(null, value);
       res.json({
         message: 'Account created',
         data: user
