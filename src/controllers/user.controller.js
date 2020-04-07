@@ -1,7 +1,15 @@
 const signupFormValidator = require('../validators/user.validate');
 const {createUser} = require('../services/user.service');
+const Mapper = require('../helpers/object-mapper');
 
 class UserController {
+  /**
+   * Create a new user account.
+   *
+   * @param {object} req express request
+   * @param {object} res express response object
+   * @param {func} next
+   */
   static async post(req, res, next) {
     const {value, error} = signupFormValidator(req.body);
     if (error) {
@@ -24,6 +32,20 @@ class UserController {
     } catch (err) {
       next(err);
     }
+  }
+
+  /**
+   * Get the logged in (token) user's information (account info)
+   *
+   * @param {object} req express request object
+   * @param {object} res express response object
+   */
+  static async get(req, res) {
+    const response = Mapper.except(req.user.toObject(), ['__v', 'password']);
+    res.json({
+      message: 'Your Info',
+      data: response
+    });
   }
 }
 

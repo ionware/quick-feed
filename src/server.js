@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const config = require('config');
 const bodyParser = require('body-parser');
 const routes = require('./routes/index');
+require('./configs/auth.config');
 
 const app = express();
 
