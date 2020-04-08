@@ -1,8 +1,15 @@
 const mongoose = require('mongoose');
+const Mapper = require('../helpers/object-mapper');
 
 const Model = mongoose.model('Story');
 
 class StoryService {
+  /**
+   * Get some amount of populated stories.
+   *
+   * @param {object} driver Database driver
+   * @param {object} options
+   */
   static async getStories(driver = null, options = {}) {
     const model = driver || Model;
     const type = options.type || null;
@@ -35,6 +42,26 @@ class StoryService {
       current_page: page + 1,
       stories: populatedStories
     };
+  }
+
+  /**
+   * Delete a story by its ID from the database.
+   *
+   * @param {string} storyId Mongoose ID
+   * @param {object} driver Database driver
+   */
+  static async deleteStory(storyId, driver = null) {
+    const model = driver || Model;
+    const story = await model.findByIdAndDelete(storyId);
+    // Send false if story isn't found.
+    if (!story) return false;
+
+    const populatedStory = await model.populate(story, [
+      {path: 'poll'},
+      {path: 'feed'}
+    ]);
+
+    return Mapper.except(populatedStory.toObject(), ['__v']);
   }
 }
 

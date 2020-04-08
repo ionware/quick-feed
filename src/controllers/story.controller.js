@@ -17,3 +17,22 @@ exports.get = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Handles deleting a story by Its ID.
+ */
+exports.delete = async (req, res, next) => {
+  const storyId = req.params.id;
+  try {
+    const response = await StoryService.deleteStory(storyId);
+    if (!response) {
+      // it is a bad request.
+      res.status(400).json({
+        message: 'Cannot find a story with specified ID.'
+      });
+    }
+    return res.json(response);
+  } catch (error) {
+    return next(error);
+  }
+};

@@ -185,10 +185,34 @@
                   $ref: '#/components/schemas/Poll'
                 feed:
                   $ref: '#/components/schemas/Feed'
+      '400':
+        description: The specified story ID is not found.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Cannot find a story with specified ID.
+      '401':
+        $ref: '#/components/responses/NotAuthorized'
     security:
-      - BearerAuth
+      - BearerAuth: []
 
 components:
+  responses:
+    NotAuthorized:
+      description: Not authorized. Authorization failed or not authenticated
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Authentication required.
+
   schemas:
     Feed:
       type: object
