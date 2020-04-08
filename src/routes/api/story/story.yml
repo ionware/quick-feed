@@ -120,7 +120,6 @@
               - type
               - excerpt
               - title
-
     responses:
       '200':
         description: >
@@ -145,6 +144,9 @@
                   $ref: '#/components/schemas/Poll'
                 feed:
                   $ref: '#/components/schemas/Feed'
+    security:
+      - BearerAuth
+
 /story/{storyId}:
   description: >
     Delete a story (`feed` or `poll`) of the specified `id`.
@@ -183,6 +185,8 @@
                   $ref: '#/components/schemas/Poll'
                 feed:
                   $ref: '#/components/schemas/Feed'
+    security:
+      - BearerAuth
 
 components:
   schemas:
@@ -260,3 +264,9 @@ components:
           type: string
         updatedAt:
           type: string
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
