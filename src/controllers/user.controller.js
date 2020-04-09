@@ -1,5 +1,6 @@
 const signupFormValidator = require('../validators/user.validate');
 const {createUser} = require('../services/user.service');
+const joiError = require('../helpers/joi-errors-map');
 const Mapper = require('../helpers/object-mapper');
 
 class UserController {
@@ -14,13 +15,11 @@ class UserController {
     const {value, error} = signupFormValidator(req.body);
     if (error) {
       // Extract error messages to thier corresponding keys (form fields)
-      const badInputs = error.details.reduce((errors, single) => {
-        return Object.assign(errors, {[single.path[0]]: single.message});
-      }, {});
+      const errors = joiError(error);
 
       res.status(400).json({
         message: 'Bad inputs',
-        errors: badInputs
+        errors
       });
     }
     try {

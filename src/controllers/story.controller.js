@@ -1,13 +1,17 @@
+const joiError = require('../helpers/joi-errors-map');
 const StoryService = require('../services/story.service');
 const addStoryValidator = require('../validators/story.validate');
 
 exports.post = async (req, res, next) => {
   const {error, value} = addStoryValidator(req.body);
-  if (error)
+  if (error) {
+    const errors = joiError(error);
+
     return res.status(400).json({
       message: 'You made an incorrect request. Check input fields.',
-      errors: error
+      errors
     });
+  }
 
   try {
     const story = await StoryService.createStory(value);
