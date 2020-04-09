@@ -15,7 +15,9 @@ const pollSchema = new mongoose.Schema(
       required: false
     },
     end: {
-      type: Date
+      type: Date,
+      required: true,
+      default: new Date(Date.now() + 86400000) // Ends in 24hrs time
     }
   },
   {timestamps: true}

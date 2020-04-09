@@ -144,8 +144,25 @@
                   $ref: '#/components/schemas/Poll'
                 feed:
                   $ref: '#/components/schemas/Feed'
+      '400':
+        description: Bad request. Would mostly occur when request body is not appropriate for story type you want to create.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: You made an incorrect request. Check input fields.
+                errors:
+                  type: object
+                  example:
+                    title: The title field is required.
+      '401':
+        $ref: '#/components/responses/NotAuthorized'
+
     security:
-      - BearerAuth
+      - BearerAuth: []
 
 /story/{storyId}:
   description: >

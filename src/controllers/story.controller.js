@@ -1,4 +1,21 @@
 const StoryService = require('../services/story.service');
+const addStoryValidator = require('../validators/story.validate');
+
+exports.post = async (req, res, next) => {
+  const {error, value} = addStoryValidator(req.body);
+  if (error)
+    return res.status(400).json({
+      message: 'You made an incorrect request. Check input fields.',
+      errors: error
+    });
+
+  try {
+    const story = await StoryService.createStory(value);
+    return res.json(story);
+  } catch (err) {
+    return next(err);
+  }
+};
 
 exports.get = async (req, res, next) => {
   const options = {

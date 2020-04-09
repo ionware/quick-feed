@@ -1,7 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const Mapper = require('../helpers/object-mapper');
 
 const Model = mongoose.model('Story');
+const PollModel = mongoose.model('Poll');
+const FeedModel = mongoose.model('Feed');
 
 class StoryService {
   /**
@@ -57,6 +60,34 @@ class StoryService {
     if (!story) return false;
 
     const populatedStory = await model.populate(story, [
+      {path: 'poll'},
+      {path: 'feed'}
+    ]);
+
+    return Mapper.except(populatedStory.toObject(), ['__v']);
+  }
+
+  static async createStory(data, driver = null) {
+    const storyModel = driver || Model;
+    // The general fields for all stories.
+    const {type, excerpt} = data;
+    const story = await storyModel.create({type, excerpt});
+    if (data.type === 'feed') {
+      const {description, title} = data;
+      const feed = await FeedModel.create({
+        description,
+        title
+      });
+      story.feed = feed._id;
+      await story.save();
+    } else {
+      const {options, end, title} = data;
+      const poll = await PollModel.create({title, options, end});
+      story.poll = poll._id;
+      await story.save();
+    }
+
+    const populatedStory = await storyModel.populate(story, [
       {path: 'poll'},
       {path: 'feed'}
     ]);
