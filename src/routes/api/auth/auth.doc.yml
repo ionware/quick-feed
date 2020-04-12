@@ -1,0 +1,44 @@
+paths:
+  /auth/login:
+    post:
+      description: Send email and password and get JWT token to make authenticated request to secured endpoints.
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: john.doe@example.com
+                password:
+                  type: string
+                  example: secret-password
+      responses:
+        '200':
+          description: (Ok) Authentication successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Auth successful.
+                  token:
+                    type: string
+                    format: JWT
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTkzNTMzNzA4MWJkYTE5YTVjN2UxM2EiLCJmaXJzd
+        '400':
+          description: Authentication failed, password or email is incorrect.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Auth failed
