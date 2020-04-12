@@ -15,7 +15,11 @@
     "secret": "super-secret-stuffs"
   },
   "api": {
-    "version": "v1"
+    "version": "v1",
+    "request": {
+      "time": 600000,
+      "maxRequest": 200
+    }
   },
   "env": "development"
 }
