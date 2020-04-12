@@ -1,3 +1,4 @@
+const config = require('config');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const JWTStrategy = require('passport-jwt').Strategy;
@@ -29,7 +30,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: JWTExtract.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'key-secret'
+      secretOrKey: config.jwt.secret
     },
     // eslint-disable-next-line func-names
     function (jwtPayload, done) {

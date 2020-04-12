@@ -1,3 +1,4 @@
+const config = require('config');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const Mapper = require('../helpers/object-mapper');
@@ -25,7 +26,9 @@ class AuthController {
         'email'
       ]);
       // generate token.
-      const token = jwt.sign(payload, 'key-secret');
+      const token = jwt.sign(payload, config.jwt.secret, {
+        expiresIn: config.jwt.expires
+      });
       return res.json({
         message: 'Auth success',
         token

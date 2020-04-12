@@ -16,10 +16,18 @@ path:
               schema:
                 type: object
                 properties:
-                  _id:
+                  message:
                     type: string
-                    format: mongooseID
-                    example: 56dedef00fefedef6734736ddecf01
+                    example: Your information
+                  data:
+                    type: object
+                    example:
+                      {
+                        _id: 5dff345d4656f001fed01,
+                        email: john.doe@example.com,
+                        firstName: John,
+                        lastName: Doe,
+                      }
         '401':
           description: Required authentication. This mostly will occur when no JWT is sent or the token is invalid.
           content:
@@ -67,7 +75,13 @@ path:
                     example: Account created
                   data:
                     type: object
-                    example: {}
+                    example:
+                      {
+                        _id: 5dff345d4656f001fed01,
+                        email: john.doe@example.com,
+                        firstName: John,
+                        lastName: Doe,
+                      }
 
         '400':
           description: Bad request. Field isn't appropriate or some validation failed.
